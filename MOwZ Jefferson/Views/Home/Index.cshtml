@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "MOwZ Jefferson";
+}
+
+<header>
+    <h1>Podział miejsc metodą Jeffersona</h1>
+</header>
+
+<p>Rozwiązanie problemu podziału miejsc w parlamencie metodą Jeffersona</p>
+
+<div id="main-content">
+    @using(Html.BeginForm("Upload", "Home", FormMethod.Post, new {@id = "FileForm", enctype = "multipart/form-data"}))
+    {
+    <table>
+    <tr>
+    <td>File:</td>
+    <td>
+    <input type="file" name="Upload" />
+    </td>
+    </tr>
+    <tr>
+    <td colspan="2">
+    <input type="submit" name="Submit" value="Wyślij"/>
+    </td>
+    </tr>
+    </table>
+    }
+</div>
+<div id="response">
+    
+</div>
+ <script type="text/javascript">
+     $(function () {
+        $("#FileForm").ajaxForm({
+           dataType:'json',
+           success:function(data) {
+               $('#response').append(data);
+           }
+        });
+     });
+     
+  </script>
+
