@@ -18,7 +18,7 @@ namespace MOwZ_Jefferson.Tests
          *          TESTY ALGORYTMU
          */
         /// <summary>
-        /// Test danych podanych na wykładzie
+        /// Test danych podanych na wykładzie (po zmianie)
         /// </summary>
         [TestMethod]
         public void SimpleData()
@@ -28,7 +28,7 @@ namespace MOwZ_Jefferson.Tests
             test.LoopToSuccess();
             var json = new JavaScriptSerializer().Serialize(test);
             Console.Write(json);
-            Assert.AreEqual(0, test.PlacmentsList.Last().DividerCode);
+            Assert.AreEqual(true, test.PlacmentsList.Last().SeatsPerStateList.SequenceEqual(new List<int>{18,23,27,17,20}));
         }
         /// <summary>
         /// Test danych dotyczących współczesnych Stanów Zjednoczonych
