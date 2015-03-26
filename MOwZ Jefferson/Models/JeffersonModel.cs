@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+
 
 namespace MOwZ_Jefferson.Models
 {
@@ -10,6 +10,14 @@ namespace MOwZ_Jefferson.Models
     /// </summary>
     public class JeffersonModel
     {
+        /// <summary>
+        /// Flaga informujaca o powodzeniu operacji
+        /// </summary>
+        public bool success { get; set; }
+        /// <summary>
+        /// Informacje o pilku przekazane z parsera pliku
+        /// </summary>
+        public string FileParserOutput { get; set; }
         /// <summary>
         /// Liczba stanów
         /// </summary>
@@ -31,10 +39,6 @@ namespace MOwZ_Jefferson.Models
         /// </summary>
         public List<SeatsPlacement> PlacmentsList { get; set; }
         /// <summary>
-        /// Informacje o pilku przekazane z parsera pliku
-        /// </summary>
-        public string FileParserOutput { get; set; }
-        /// <summary>
         /// Konstruktor klasy zawierającej informacje o parlamencie, stanach i populacji.
         /// </summary>
         /// <param name="n">Liczba stanów</param>
@@ -49,6 +53,7 @@ namespace MOwZ_Jefferson.Models
             PopulationOverall = StatePolulationList.Sum();
             PlacmentsList = new List<SeatsPlacement>();
             FileParserOutput = filePrserOut;
+            success = false;
         }
         /// <summary>
         /// Liczy dzielnik, wartości kwot oraz przydział miejsc. Zwraca również kod dzielnika.
@@ -79,6 +84,7 @@ namespace MOwZ_Jefferson.Models
             {
                 this.PlacmentsList.Add(DoTheJobPlacement());
             } while (this.PlacmentsList.Last().DividerCode != 0);
+            success = true;
         }
     }
     /// <summary>
@@ -119,32 +125,69 @@ namespace MOwZ_Jefferson.Models
         /// <returns>Dzielnik zmodyfikowany, zaokrąglony w dół do wartości całkowitej.</returns>
         public int CalcModifiedDivider(List<SeatsPlacement> prevSeats)
         {
+            //górny i dolny z dzielnika standardowego
             int upper = prevSeats[0].Divider;
             int lower = prevSeats[0].Divider;
-            int uLimit = prevSeats.Max(x => x.Divider);
-            int lLimit = prevSeats.Min(x => x.Divider);
-            for (int i = prevSeats.Count - 1; i >= 0; i--)
-            {
-                if (prevSeats[i].DividerCode == 1 && prevSeats[i].Divider < upper)
-                {
-                    upper = prevSeats[i].Divider;
-                    break;
-                }
-            }
+            //limity z wartości skrajnych dzielników
+            int uLimit = 0;
+            int lLimit = 0;
 
-            for (int i = prevSeats.Count - 1; i >= 0; i--)
-            {
-                if (prevSeats[i].DividerCode == -1 && prevSeats[i].Divider > lower)
-                {
-                    lower = prevSeats[i].Divider;
-                    break;
-                }
-            }
+            Random random = new Random();
+            var range = (int)Math.Floor(prevSeats.Last().Divider * 0.1);
 
+            try
+            {
+                uLimit = prevSeats.Where(x => x.DividerCode == -1).Min(x => x.Divider);
+            }
+            catch
+            {
+                uLimit = random.Next(prevSeats.Last().Divider, prevSeats.Last().Divider + range);
+            }
+            try
+            {
+                lLimit = prevSeats.Where(x => x.DividerCode == 1).Max(x => x.Divider);
+            }
+            catch
+            {
+                lLimit = random.Next(prevSeats.Last().Divider - range, prevSeats.Last().Divider); 
+            }
+            //ostatni za duży dzielnik
+            if (prevSeats.Count(x => x.DividerCode == -1)!=0)
+            {
+               /* for (int i = prevSeats.Count - 1; i >= 0; i--)
+                {
+                    if (prevSeats[i].DividerCode == -1 && prevSeats[i].Divider < upper)
+                    {
+                        upper = prevSeats[i].Divider;
+                        break;
+                    }
+                }*/
+                upper = prevSeats.Where(x => x.DividerCode == -1).Min(x => x.Divider);
+            }
+            else
+            {
+                upper = random.Next(prevSeats.Last().Divider, prevSeats.Last().Divider + range);
+            }
+            //ostatni za mały dzielnik
+            if (prevSeats.Count(x => x.DividerCode == 1) != 0)
+            {
+                /*for (int i = prevSeats.Count - 1; i >= 0; i--)
+                {
+                    if (prevSeats[i].DividerCode == 1 && prevSeats[i].Divider > lower)
+                    {
+                        lower = prevSeats[i].Divider;
+                        break;
+                    }
+                }*/
+                lower = prevSeats.Where(x => x.DividerCode == 1).Max(x => x.Divider);
+            }
+            else
+            {
+                lower = random.Next(prevSeats.Last().Divider - range, prevSeats.Last().Divider); 
+            }
+            //jeżeli wartości są takie same, wtedy losuje wartości w przedziale +-10%
             if (upper == lower)
             {
-                Random random = new Random();
-                var range = (int)Math.Floor(upper * 0.1);
                 lower = random.Next(lower - range, lower);
                 upper = random.Next(upper, upper + range);
                 if (lower < lLimit) lower = lLimit;
@@ -152,10 +195,12 @@ namespace MOwZ_Jefferson.Models
             }
             int div = 0;
             int cnt = 0;
+            //szukanie dzielnika który jeszcze nie był sprawdzany
             do
             {
                 cnt++;
                 div = (int) Math.Floor(((double) upper + (double) lower)/2);
+                //awaryjne zwiększanie lub zmniejszanie dzielnika
                 if (cnt == 100)
                 {
                     do
@@ -214,12 +259,41 @@ namespace MOwZ_Jefferson.Models
             }
             else if(parlimentSize > seatsList.Sum())
             {
-                return 1;
+                return -1;
             }
             else
             {
-                return -1;
+                return 1;
             }
+        }
+    }
+    /// <summary>
+    /// Klasa przeznaczona dla danych z formularza
+    /// </summary>
+    class BasicJeffersonData
+    {
+        /// <summary>
+        /// Liczba stanów
+        /// </summary>
+        public int N;
+        /// <summary>
+        /// Rozmiar parlamentu
+        /// </summary>
+        public int H;
+        /// <summary>
+        /// Lista populacji stanów
+        /// </summary>
+        public List<int> Populations;
+        /// <summary>
+        /// Metoda tworząca format danych wejściowych walidatora.
+        /// </summary>
+        /// <returns>Napis w formacie odpowiadającym temu z plików.</returns>
+        public string Stringify()
+        {
+            var result = N.ToString() + " " + H.ToString() + "\n";
+            result = Populations.Aggregate(result, (current, population) => current + (population.ToString() + " "));
+            result = result.Remove(result.Count() - 1);
+            return result;
         }
     }
     
