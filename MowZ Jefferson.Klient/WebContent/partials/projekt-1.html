@@ -1,0 +1,110 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<form name="jeffersonForm" novalidate role="form" class="form-horizontal">
+				<fieldset>
+					<legend>Formularz</legend>
+
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="number">Liczba stanów:</label>
+						<div class="col-md-6">
+							<input ng-model="n" id="number" name="number" placeholder="Wprowadz liczbe stanów" class="form-control" required ng-pattern="/^[0-9]{1,7}$/"
+								type="number" ng-blur="getNumber(n)"></input>
+							<div ng-show="jeffersonForm.number.$dirty && jeffersonForm.number.$touched" ng-messages="jeffersonForm.number.$error">
+								<div ng-message="required">To pole jest wymagane</div>
+								<div ng-message="pattern">Tylko liczby naturalne</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="H">Rozmiar parlamentu:</label>
+						<div class="col-md-6">
+							<input required ng-model="h" class="form-control" id="H" name="H" placeholder="Wprowadz rozmiar parlamentu" ng-pattern="/^[0-9]{1,7}$/" type="number">
+		                    </input>
+		                    <div ng-show="jeffersonForm.H.$dirty && jeffersonForm.H.$touched" ng-messages="jeffersonForm.H.$error">
+								<div ng-message="required">To pole jest wymagane</div>
+								<div ng-message="pattern">Tylko liczby naturalne</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" ng-repeat="p in narray track by $index">
+						<label class="col-md-3 control-label" for="p">{{$index+1}} stan:</label>
+						<div class="col-md-6">
+							<input required ng-model="p.value" class="form-control" id="p" name="p" placeholder="Wprowadz liczbe ludności w poszczególnych stanach" type="number" ng-pattern="/^[0-9]{1,7}$/">
+		                    </input>
+		                </div>
+		            </div>
+		            <div class="form-group">
+						<div class="col-md-9 col-md-offset-3">
+							<input ng-disabled="Submitting" type="button" id="submit" value="Wyślij" 
+		                        class="btn btn-primary" ng-click="getResultFromForm()" /> 
+		                    <a ng-disabled="Submitting" id="cancelButton" href="#/" name="cancelButton" class="btn btn-default">Anuluj</a>
+		                    <img ng-show="Submitting" src="img/ajax-loader.gif" />
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div class="col-md-6">
+			<form name="jeffersonFile" novalidate role="form" class="form-horizontal">
+				<fieldset>
+					<legend>Plik</legend>
+					<div class="form-group">
+						<div class="col-md-6">
+							<input file-model="file" ng-file-select class="form-control" required
+								type="file"></input>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-9 col-md-offset-3">
+							<input ng-disabled="Submitting" type="button" id="submit" value="Wyślij" 
+		                        class="btn btn-primary" ng-click="getResult()" /> 
+		                    <a ng-disabled="Submitting" id="cancelButton" href="#/" name="cancelButton" class="btn btn-default">Anuluj</a>
+		                    <img ng-show="Submitting" src="img/ajax-loader.gif" />
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<label class="col-md-1 control-label" >Szczegóły</label>
+		<input ng-model="show" type="checkbox"> 
+	</div>
+	<div class="row" ng-hide="empty==true||correct==false||!show" style="padding-top:10pt">
+		<div class="col-md-12" >
+			<table st-table="rowCollection" class="table table-striped">
+  				<tr>
+  					<th class="text-center">Stan</th>
+      				<th class="text-center" ng-repeat="column in tablelabel track by $index">{{$index+1}}</th>
+      				<th class="text-center">Suma</th>
+      			</tr>
+      			<tbody ng-repeat="row in result.PlacmentsList track by $index">
+	  				<tr>
+	  					<td>Przydział {{$index+1}}</td>
+	    				<td class="text-right" ng-repeat="cal in row.CalculatedQuotaList track by $index">{{cal}}</td>
+	    				<td class="text-right">---</td>
+	    			</tr>
+	    			<tr>
+	  					<td>Dolna kwota</td>
+	    				<td class="text-right" ng-repeat="seat in row.SeatsPerStateList track by $index">{{seat}}</td>
+	    				<td class="text-right">{{getTotal(row.SeatsPerStateList)}}</td>
+	    			</tr>
+    			</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div ng-repeat="plac in result.PlacmentsList">
+			<div ng-show="plac.DividerCode==0">
+				<canvas id="doughnut" class="chart chart-pie" data="plac.SeatsPerStateList"
+			labels="labels" legend="legend"></canvas> 
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12" ng-show="empty==false&&correct==false" >
+ 			<alert ng-repeat="alert in alerts" type="danger" close="closeAlert($index)">{{result.FileParserOutput}}</alert>
+ 		</div>
+	</div>
+</div>
