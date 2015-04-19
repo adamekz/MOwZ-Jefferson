@@ -7,8 +7,10 @@ myApp.controller('JeffersonController', function($scope,$location,$http) {
     $scope.list = []; 
     $scope.labels = [];
     $scope.show = false;
+    $scope.Submitting = false;
 
     $scope.getResult = function(){
+        $scope.Submitting = true;
         $scope.labels = [];
         $scope.alerts = [];
  
@@ -38,23 +40,27 @@ myApp.controller('JeffersonController', function($scope,$location,$http) {
                             $scope.labels.push('State '+j);
                         };  
                         $scope.tablelabel = $scope.PlacmentsList[0].SeatsPerStateList;
+                        $scope.Submitting = false;
                     }else {
                         $scope.list=[];
                         $scope.result = data.data; 
                         $scope.correct =false;
                         $scope.empty=false; 
                         $scope.alerts = [{ type: 'danger', msg: data.data }];
+                        $scope.Submitting = false;
                     }
                 },
                 function(data) {
                     $scope.list=[];
                     $scope.result = 'Błąd komunikacji z serwerem';
+                    $scope.Submitting = false;
                     $location.path('/');
                 });
         }
     };
     $scope.getResultFromForm = function(){
 
+        $scope.Submitting = true;
         $scope.result=[];
         $scope.PlacmentsList=[];
         $scope.labels = [];
@@ -87,17 +93,20 @@ myApp.controller('JeffersonController', function($scope,$location,$http) {
                             var j=i+1;        
                             $scope.labels.push('State '+j);
                         };  
+                        $scope.Submitting = false;
                     }else {
                         $scope.list=[];
                         $scope.result = data.data; 
                         $scope.correct =false;
                         $scope.empty=false; 
                         $scope.alerts = [{ type: 'danger', msg: data.data }];
+                        $scope.Submitting = false;
                     }
                 },
                 function(data) {
                     $scope.list=[];
                     $scope.result = 'Błąd komunikacji z serwerem';
+                    $scope.Submitting = false;
                     $location.path('/');
                 });
             
