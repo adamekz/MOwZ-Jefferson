@@ -217,8 +217,9 @@ namespace MOwZ_Jefferson.Models
                     break;
                 }
             } while (prevSeats.Any(x => x.Divider == div));
-
+            
             return div;
+            
         }
         /// <summary>
         /// Tworzy kolekcję kwot pozwalającą na podział miejsc w parlamencie
@@ -230,7 +231,7 @@ namespace MOwZ_Jefferson.Models
         {
             foreach (var population in statesPopulList)
             {
-                yield return population/(float)divider;
+                yield return population/(float)divider ;
             }
         }
         /// <summary>

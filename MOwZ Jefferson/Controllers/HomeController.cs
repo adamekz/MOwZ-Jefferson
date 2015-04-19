@@ -27,52 +27,72 @@ namespace MOwZ_Jefferson.Controllers
         [HttpPost]
         public JsonResult Upload(FormCollection formCollection)
         {
-            var resp = "Nope";
-            if (Request != null)
+            try
             {
-                var file = Request.Files["Upload"];
-
-                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                var resp = "Nope";
+                if (Request != null)
                 {
-                    var fileBytes = new byte[file.ContentLength];
-                    file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                    resp= System.Text.Encoding.Default.GetString(fileBytes);
-                }
-            }
-            var fileM = new FileModel();
-            var resDat = fileM.StringEncounter(resp);
+                    var file = Request.Files["Upload"];
 
-            if (resDat.Split('\n').Last() != "OK")
-            {
-                return Json(new { success = false, FileParserOutput = resDat });
+                    if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                    {
+                        var fileBytes = new byte[file.ContentLength];
+                        file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+                        resp = System.Text.Encoding.Default.GetString(fileBytes);
+                    }
+                }
+                var fileM = new FileModel();
+                var resDat = fileM.StringEncounter(resp);
+
+                if (resDat.Split('\n').Last() != "OK")
+                {
+                    return Json(new {success = false, FileParserOutput = resDat});
+                }
+                var jefferson = new JeffersonModel(fileM.n, fileM.h, fileM.StatePopuList, resDat);
+                jefferson.LoopToSuccess();
+                return Json(jefferson);
             }
-            var jefferson = new JeffersonModel(fileM.n, fileM.h, fileM.StatePopuList, resDat);
-            jefferson.LoopToSuccess();
-            return Json(jefferson);
+            catch
+            {
+                return Json(new {success = false, FileParserOutput = "\nOgólny błąd aplikacji\nERROR"});
+            }
         }
 
         /// <summary>
         /// Przesłanie danych z formularza na stronie do serwera
         /// </summary>
-        /// <param name="json">JSON stworzony po stronie serwera, zgodny z polami klasy BasicJeffersonModel.</param>
+        /// <param name="N">Parametr określający liczbę stanów.</param>
+        /// <param name="H">Parametr określający rozmiar parlamentu.</param>
+        /// <param name="Populations">Parametr zawierający kolekcję populacji stanów.</param>
         /// <returns>JSON z wynikami działania projektu.</returns>
         [HttpPost]
-        public JsonResult Send(string json)
+        public JsonResult Send(int N, int H, IEnumerable<int> Populations)
         {
-            var data = new JavaScriptSerializer().Deserialize<BasicJeffersonData>(json);
-            
-            var stringifiedForm = data.Stringify();
-
-            var fileM = new FileModel();
-            var resDat = fileM.StringEncounter(stringifiedForm);
-
-            if (resDat.Split('\n').Last() != "OK")
+            try
             {
-                return Json(new { success = false, FileParserOutput = resDat });
+                var recivedData = new BasicJeffersonData
+                {
+                    N = N,
+                    H = H,
+                    Populations = Populations.ToList()
+                };
+                var stringifiedForm = recivedData.Stringify();
+
+                var fileM = new FileModel();
+                var resDat = fileM.StringEncounter(stringifiedForm);
+
+                if (resDat.Split('\n').Last() != "OK")
+                {
+                    return Json(new {success = false, FileParserOutput = resDat});
+                }
+                var jefferson = new JeffersonModel(fileM.n, fileM.h, fileM.StatePopuList, resDat);
+                jefferson.LoopToSuccess();
+                return Json(jefferson);
             }
-            var jefferson = new JeffersonModel(fileM.n, fileM.h, fileM.StatePopuList, resDat);
-            jefferson.LoopToSuccess();
-            return Json(jefferson);
+            catch
+            {
+                return Json(new { success = false, FileParserOutput = "\nOgólny błąd aplikacji\nERROR" });
+            }
         }
     }
 }

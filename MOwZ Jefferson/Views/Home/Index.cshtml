@@ -1,44 +1,134 @@
-﻿
-@{
-    ViewBag.Title = "MOwZ Jefferson";
-}
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
 
-<header>
-    <h1>Podział miejsc metodą Jeffersona</h1>
-</header>
+<head>
 
-<p>Rozwiązanie problemu podziału miejsc w parlamencie metodą Jeffersona</p>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Metody optymalizacji</title>
+    <link REL="SHORTCUT ICON" HREF="~/Content/favicon.png">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
 
-<div id="main-content">
-    @using(Html.BeginForm("Upload", "Home", FormMethod.Post, new {@id = "FileForm", enctype = "multipart/form-data"}))
-    {
-    <table>
-    <tr>
-    <td>File:</td>
-    <td>
-    <input type="file" name="Upload" />
-    </td>
-    </tr>
-    <tr>
-    <td colspan="2">
-    <input type="submit" name="Submit" value="Wyślij"/>
-    </td>
-    </tr>
-    </table>
-    }
-</div>
-<div id="response">
-    
-</div>
- <script type="text/javascript">
-     $(function () {
-        $("#FileForm").ajaxForm({
-           dataType:'json',
-           success:function(data) {
-               $('#response').append(data);
-           }
-        });
-     });
-     
-  </script>
+    <style>
+        body {
+            padding-top: 55px;
+            padding-bottom: 75px;
+        }
+    </style>
 
+    <link rel="stylesheet" href="~/Content/css/vendor/bootstrap/bootstrap.min.css">
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css">
+
+    <link rel="stylesheet" href="~/Content/css/vendor/ng-grid/ng-grid.css">
+
+    <!-- TODO needed? -->
+    <link href="~/Content/css/vendor/angularstrap/styles.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/Content/css/vendor/angularstrap/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="~/Content/css/vendor/angularstrap/bootstrap-timepicker.css">
+    <link rel="stylesheet" href="~/Content/bower/angular-chart/angular-chart.css">
+
+
+    <!-- <link rel="stylesheet" href="css/vendor/animate/animate.css"> -->
+
+    <link rel="stylesheet" type="text/css" href="~/Content/css/app.css"/>
+
+    <script src="~/Scripts/js/vendor/modernizr/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+
+
+</head>
+
+<body ng-app="myApp">
+
+<!--[if lt IE 7]>
+<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="//browsehappy.com/">upgrade
+    your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to
+    improve your experience.</p>
+<![endif]-->
+
+<!-- bootstrap navbar -->
+<div ng-include="'Content/partials/navbar-top.html'"></div>
+
+<!-- ng routes hook -->
+<div ng-view></div>
+
+<!-- footer -->
+<div ng-include="'Content/partials/navbar-bottom.html'"></div>
+
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script>window.jQuery || document.write('<script src="//code.jquery.com/jquery-1.10.2.min.js"><\/script>')</script>
+
+<script src="~/Scripts/js/vendor/bootstrap/bootstrap.min.js"></script>
+
+<!-- TODO localize -->
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+
+<!-- <script src="//angular-ui.github.com/lib/bootstrap/docs/assets/js/bootstrap.min.js"></script> -->
+
+<script type="text/javascript" src="~/Content/bower/angular/angular.min.js"></script>
+<script type="text/javascript" src="~/Content/bower/angular-route/angular-route.min.js"></script>
+<script type="text/javascript" src="~/Content/bower/angular-messages/angular-messages.min.js"></script>
+<script type="text/javascript" src="~/Content/bower/chart/Chart.min.js"></script>
+<script type="text/javascript" src="~/Content/bower/angular-chart/angular-chart.min.js"></script>
+<script type="text/javascript" src="~/Content/bower/smart-table/dist/smart-table.min.js"></script>
+<script type="text/javascript" src="~/Content/bower/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+
+<script src="~/Scripts/js/vendor/angularui/angular-ui.js"></script>
+
+<script src="~/Scripts/js/vendor/ng-grid/ng-grid.js"></script>
+
+<!-- TODO needed?  Then localize... -->
+<!-- <script src="//angular-ui.github.com/bootstrap/ui-bootstrap-tpls-0.1.0-SNAPSHOT.js"></script> -->
+
+<!-- enables rendering of injected html -->
+<!-- TODO localize -->
+<script src="http://code.angularjs.org/1.0.1/angular-sanitize-1.0.1.js"></script>
+
+<!-- angular strap -->
+<!-- TODO move from cdn to local -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+
+
+<!-- TODO consider using NPM/Bower to install third party libs -->
+
+<!-- TODO needed? -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.js"></script>
+<script src="~/Scripts/js/vendor/angularstrap/angular-strap.min.js"></script>
+
+
+<!--  TODO compile/optimise these during build -->
+<script src="~/Scripts/js/app.js"></script>
+
+<script src="~/Scripts/js/services/services.js"></script>
+
+<script type="text/javascript" src="~/Scripts/js/controllers/jeffersonController.js"></script>
+
+
+
+<script src="~/Scripts/js/filters/filters.js"></script>
+<script src="~/Scripts/js/directives/fileModel.js"></script>
+
+
+<!-- example area for ui elements (non-production) -->
+<!-- <script src="playground/playground.js"></script> -->
+
+<!-- <script type="text/javascript" src="~/Scripts/js/vendor/noty-2.1.0/js/noty/jquery.noty.js"></script> -->
+
+<!-- <script type="text/javascript" src="~/Scripts/js/vendor/noty-2.1.0/js/noty/layouts/bottomRight.js"></script> -->
+
+<!-- <script type="text/javascript" src="~/Scripts/js/vendor/noty-2.1.0/js/noty/themes/nucleus.js"></script> -->
+
+
+
+</body>
+</html>
