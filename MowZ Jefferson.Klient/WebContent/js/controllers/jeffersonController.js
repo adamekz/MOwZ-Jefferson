@@ -58,6 +58,7 @@ myApp.controller('JeffersonController', function($scope,$location,$http) {
         $scope.result=[];
         $scope.PlacmentsList=[];
         $scope.labels = [];
+        $scope.alerts = [];
   
         
         $scope.jeffersonForm.number.$setDirty(); 
@@ -91,6 +92,7 @@ myApp.controller('JeffersonController', function($scope,$location,$http) {
                         $scope.result = data.data; 
                         $scope.correct =false;
                         $scope.empty=false; 
+                        $scope.alerts = [{ type: 'danger', msg: data.data }];
                     }
                 },
                 function(data) {
