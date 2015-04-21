@@ -8,22 +8,22 @@
 					<div class="form-group">
 						<label class="col-md-3 control-label" for="number">Liczba stanów:</label>
 						<div class="col-md-6">
-							<input ng-model="n" id="number" name="number" placeholder="Wprowadz liczbe stanów" class="form-control" required ng-pattern="/^[0-9]{1,7}$/"
+							<input ng-model="n" id="number" name="number" placeholder="Wprowadz liczbe stanów" class="form-control" required ng-pattern="/^[0-9]{1,2}$/"
 								type="number" ng-blur="getNumber(n)"></input>
 							<div ng-show="jeffersonForm.number.$dirty && jeffersonForm.number.$touched" ng-messages="jeffersonForm.number.$error">
 								<div ng-message="required">To pole jest wymagane</div>
-								<div ng-message="pattern">Tylko liczby naturalne</div>
+								<div ng-message="pattern">Tylko liczby naturalne nie większe niz 99!</div>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-md-3 control-label" for="H">Rozmiar parlamentu:</label>
 						<div class="col-md-6">
-							<input required ng-model="h" class="form-control" id="H" name="H" placeholder="Wprowadz rozmiar parlamentu" ng-pattern="/^[0-9]{1,7}$/" type="number">
+							<input required ng-model="h" class="form-control" id="H" name="H" placeholder="Wprowadz rozmiar parlamentu" ng-pattern="/^[0-9]{1,3}$/" type="number">
 		                    </input>
 		                    <div ng-show="jeffersonForm.H.$dirty && jeffersonForm.H.$touched" ng-messages="jeffersonForm.H.$error">
 								<div ng-message="required">To pole jest wymagane</div>
-								<div ng-message="pattern">Tylko liczby naturalne</div>
+								<div ng-message="pattern">Tylko liczby naturalne nie większe niż 999 !</div>
 							</div>
 						</div>
 					</div>
