@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Services.Description;
+using Microsoft.Ajax.Utilities;
 
 
 namespace MOwZ_Jefferson.Models
@@ -72,6 +74,8 @@ namespace MOwZ_Jefferson.Models
             }
             placement.CalculatedQuotaList = placement.CalcQuotas(this.StatePolulationList, placement.Divider).ToList();
             placement.SeatsPerStateList = placement.CalcSeatsPerState(placement.CalculatedQuotaList).ToList();
+            if(placement.SeatsPerStateList.Contains(Int32.MinValue))
+                throw new TendToInfinityException();
             placement.DividerCode = placement.GradeDivider(this.ParlamentSize, placement.SeatsPerStateList);
             return placement;
         }
@@ -80,9 +84,15 @@ namespace MOwZ_Jefferson.Models
         /// </summary>
         public void LoopToSuccess()
         {
+            var counter = 0;
             do
             {
                 this.PlacmentsList.Add(DoTheJobPlacement());
+                if (counter == 500)
+                {
+                    throw new LoopCounterException(this);
+                }
+                counter++;
             } while (this.PlacmentsList.Last().DividerCode != 0);
             success = true;
         }
@@ -297,5 +307,22 @@ namespace MOwZ_Jefferson.Models
             return result;
         }
     }
-    
+    /// <summary>
+    /// Klasa wyjątków polegających na przekroczeniu granicznej wartości licznika pętli
+    /// </summary>
+    public class LoopCounterException : Exception
+    {
+        public JeffersonModel TmpJeffersonModel;
+        public LoopCounterException(JeffersonModel input)
+        {
+            this.TmpJeffersonModel = input;
+        }
+    }
+    /// <summary>
+    /// Klasa wyjątków definiująca przypadek w którym kwoty dążą do nieskończoności
+    /// </summary>
+    public class TendToInfinityException : Exception
+    {
+         
+    }
 }

@@ -234,5 +234,21 @@ namespace MOwZ_Jefferson.Tests
                 
             }
         }
+        /// <summary>
+        /// Test wywołujący wyjątek TendToInfinityException
+        /// </summary>
+        [TestMethod]
+        public void TestTendToInf()
+        {
+            var test = new JeffersonModel(3, 321, new List<int> {111, 222, 333}, "\nOK");
+            try
+            {
+                test.LoopToSuccess();
+            }
+            catch (TendToInfinityException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
     }
 }

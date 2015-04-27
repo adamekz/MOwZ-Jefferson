@@ -84,7 +84,7 @@ namespace MOwZ_Jefferson.Models
                     output += "\nPonad połowa wartości na liście populacji jest równa zero";
                     errorFlag = true;
                 }
-                if (n > 10000 || h > 100000 || StatePopuList.Exists(x => x > 20000000))
+                if (n > 99 || h > 999 || StatePopuList.Exists(x => x > 20000000))
                 {
                     output += "\nWartości przekraczają założone maksymalne progi";
                     errorFlag = true;
