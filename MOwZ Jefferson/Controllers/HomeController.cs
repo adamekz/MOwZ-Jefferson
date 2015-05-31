@@ -9,9 +9,13 @@ using MOwZ_Jefferson.Models;
 
 namespace MOwZ_Jefferson.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController// : //Controller
     {
-        /// <summary>
+        public HomeController()
+        {
+
+        }
+       /* /// <summary>
         /// Strona główna projektu
         /// </summary>
         /// <returns>Widok strony głównej</returns>
@@ -93,6 +97,6 @@ namespace MOwZ_Jefferson.Controllers
             {
                 return Json(new { success = false, FileParserOutput = "\nOgólny błąd aplikacji\nERROR" });
             }
-        }
+        }*/
     }
 }

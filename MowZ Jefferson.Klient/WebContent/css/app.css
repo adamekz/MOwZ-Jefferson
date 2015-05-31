@@ -113,4 +113,11 @@ supports grid feature
     max-width: 69%;
     min-width: 63px;
 }
-
+.green{
+    color:green;
+    font-weight: bold;
+}
+.red{
+    color:red;
+    font-weight: bold;
+}

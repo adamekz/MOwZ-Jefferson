@@ -38,7 +38,10 @@ myApp.config(['$routeProvider', '$locationProvider', '$httpProvider', function (
     $routeProvider.when('/metodajeffersona-dokumentacja', {
         templateUrl:'partials/projekt-1-doc.html'
     });
-
+    $routeProvider.when('/twet', {
+        controller: 'TwetController',
+        templateUrl:'partials/projekt-2.html'
+    });
     // note that to minimize playground impact on app.js, we
     // are including just this simple route with a parameterized 
     // partial value (see playground.js and playground.html)

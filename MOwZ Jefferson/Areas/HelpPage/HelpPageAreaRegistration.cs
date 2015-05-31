@@ -3,9 +3,9 @@ using System.Web.Mvc;
 
 namespace MOwZ_Jefferson.Areas.HelpPage
 {
-    public class HelpPageAreaRegistration : AreaRegistration
+    public class HelpPageAreaRegistration //: //AreaRegistration
     {
-        public override string AreaName
+      /*  public override string AreaName
         {
             get
             {
@@ -21,6 +21,6 @@ namespace MOwZ_Jefferson.Areas.HelpPage
                 new { controller = "Help", action = "Index", apiId = UrlParameter.Optional });
 
             HelpPageConfig.Register(GlobalConfiguration.Configuration);
-        }
+        }*/
     }
 }
