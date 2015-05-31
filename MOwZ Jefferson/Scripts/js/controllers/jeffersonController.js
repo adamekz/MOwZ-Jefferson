@@ -10,11 +10,12 @@ myApp.controller('JeffersonController', function($scope,$location,$http) {
     $scope.Submitting = false;
 
     $scope.getResult = function(){
-        $scope.Submitting = true;
+        
         $scope.labels = [];
         $scope.alerts = [];
  
         if($scope.jeffersonFile.$valid) {
+            $scope.SubmittingFile = true;
 
             var fd = new FormData();
             fd.append('Upload', $scope.file);
@@ -40,27 +41,27 @@ myApp.controller('JeffersonController', function($scope,$location,$http) {
                             $scope.labels.push('State '+j);
                         };  
                         $scope.tablelabel = $scope.PlacmentsList[0].SeatsPerStateList;
-                        $scope.Submitting = false;
+                        $scope.SubmittingFile = false;
                     }else {
                         $scope.list=[];
                         $scope.result = data.data; 
                         $scope.correct =false;
                         $scope.empty=false; 
                         $scope.alerts = [{ type: 'danger', msg: data.data }];
-                        $scope.Submitting = false;
+                        $scope.SubmittingFile = false;
                     }
                 },
                 function(data) {
                     $scope.list=[];
                     $scope.result = 'Błąd komunikacji z serwerem';
-                    $scope.Submitting = false;
+                    $scope.SubmittingFile = false;
                     $location.path('/');
                 });
         }
     };
     $scope.getResultFromForm = function(){
 
-        $scope.Submitting = true;
+       
         $scope.result=[];
         $scope.PlacmentsList=[];
         $scope.labels = [];
@@ -73,6 +74,7 @@ myApp.controller('JeffersonController', function($scope,$location,$http) {
         $scope.jeffersonForm.H.$setTouched();
 
         if($scope.jeffersonForm.$valid) {
+             $scope.SubmittingForm = true;
 
             for (var i = 0; i < $scope.n; i++) {
                 $scope.list.push($scope.narray[i].value);
@@ -93,20 +95,20 @@ myApp.controller('JeffersonController', function($scope,$location,$http) {
                             var j=i+1;        
                             $scope.labels.push('State '+j);
                         };  
-                        $scope.Submitting = false;
+                        $scope.SubmittingForm = false;
                     }else {
                         $scope.list=[];
                         $scope.result = data.data; 
                         $scope.correct =false;
                         $scope.empty=false; 
                         $scope.alerts = [{ type: 'danger', msg: data.data }];
-                        $scope.Submitting = false;
+                        $scope.SubmittingForm = false;
                     }
                 },
                 function(data) {
                     $scope.list=[];
                     $scope.result = 'Błąd komunikacji z serwerem';
-                    $scope.Submitting = false;
+                    $scope.SubmittingForm = false;
                     $location.path('/');
                 });
             

@@ -289,10 +289,13 @@
     <Content Include="Content\css\vendor\ng-grid\ng-grid.css" />
     <Content Include="Content\favicon.png" />
     <Content Include="Content\img\ajax-loader.gif" />
+    <Content Include="Content\img\JeffersonControllerBlock.png" />
+    <Content Include="Content\img\JeffersonModelBlock.png" />
     <Content Include="Content\partials\footer.html" />
     <Content Include="Content\partials\home.html" />
     <Content Include="Content\partials\navbar-bottom.html" />
     <Content Include="Content\partials\navbar-top.html" />
+    <Content Include="Content\partials\projekt-1-doc.html" />
     <Content Include="Content\partials\projekt-1.html" />
     <Content Include="Content\partials\projekt-2.html" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />

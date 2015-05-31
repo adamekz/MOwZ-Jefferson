@@ -35,6 +35,9 @@ myApp.config(['$routeProvider', '$locationProvider', '$httpProvider', function (
         controller: 'JeffersonController',
         templateUrl:'Content/partials/projekt-1.html'
     });
+    $routeProvider.when('/metodajeffersona-dokumentacja', {
+        templateUrl:'Content/partials/projekt-1-doc.html'
+    });
 
     // note that to minimize playground impact on app.js, we
     // are including just this simple route with a parameterized 

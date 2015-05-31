@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.EnterpriseServices.CompensatingResourceManager;
 using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -53,12 +54,28 @@ namespace MOwZ_Jefferson.Controllers
                     return Json(new {success = false, FileParserOutput = resDat});
                 }
                 var jefferson = new JeffersonModel(fileM.n, fileM.h, fileM.StatePopuList, resDat);
-                jefferson.LoopToSuccess();
+                try
+                {
+                    jefferson.LoopToSuccess();
+                }
+                catch (LoopCounterException lce)
+                {
+                    jefferson.FileParserOutput += "\nPodane dane wywołały osiągnięcie limitu powtórzeń pętli.";
+                    return Json(jefferson);
+                }
+                catch (TendToInfinityException ttie)
+                {
+                    jefferson.FileParserOutput += "\nPodane dane nie pozwalają na znalezienie optymalnego przydziału";
+                }
+                if (jefferson.FileParserOutput.Contains("ERROR"))
+                {
+                    jefferson.FileParserOutput.Replace("ERROR", "");
+                }
                 return Json(jefferson);
             }
             catch
             {
-                return Json(new {success = false, FileParserOutput = "\nOgólny błąd aplikacji\nERROR"});
+                return Json(new {success = false, FileParserOutput = "\nOgólny błąd aplikacji"});
             }
         }
 
@@ -90,12 +107,28 @@ namespace MOwZ_Jefferson.Controllers
                     return Json(new {success = false, FileParserOutput = resDat});
                 }
                 var jefferson = new JeffersonModel(fileM.n, fileM.h, fileM.StatePopuList, resDat);
-                jefferson.LoopToSuccess();
+                try
+                {
+                    jefferson.LoopToSuccess();
+                }
+                catch (LoopCounterException)
+                {
+                    jefferson.FileParserOutput += "\nPodane dane wywołały osiągnięcie limitu powtórzeń pętli.";
+                    return Json(jefferson);
+                }
+                catch (TendToInfinityException)
+                {
+                    jefferson.FileParserOutput += "\nPodane dane nie pozwalają na znalezienie optymalnego przydziału";
+                }
+                if (jefferson.FileParserOutput.Contains("ERROR"))
+                {
+                    jefferson.FileParserOutput.Replace("ERROR", "");
+                }
                 return Json(jefferson);
             }
             catch
             {
-                return Json(new { success = false, FileParserOutput = "\nOgólny błąd aplikacji\nERROR" });
+                return Json(new { success = false, FileParserOutput = "\nOgólny błąd aplikacji" });
             }
         }*/
     }

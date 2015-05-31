@@ -8,22 +8,22 @@
 					<div class="form-group">
 						<label class="col-md-3 control-label" for="number">Liczba stanów:</label>
 						<div class="col-md-6">
-							<input ng-model="n" id="number" name="number" placeholder="Wprowadz liczbe stanów" class="form-control" required ng-pattern="/^[0-9]{1,7}$/"
+							<input ng-model="n" id="number" name="number" placeholder="Wprowadz liczbe stanów" class="form-control" required ng-pattern="/^[0-9]{1,2}$/"
 								type="number" ng-blur="getNumber(n)"></input>
 							<div ng-show="jeffersonForm.number.$dirty && jeffersonForm.number.$touched" ng-messages="jeffersonForm.number.$error">
 								<div ng-message="required">To pole jest wymagane</div>
-								<div ng-message="pattern">Tylko liczby naturalne</div>
+								<div ng-message="pattern">Tylko liczby naturalne nie większe niz 99!</div>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-md-3 control-label" for="H">Rozmiar parlamentu:</label>
 						<div class="col-md-6">
-							<input required ng-model="h" class="form-control" id="H" name="H" placeholder="Wprowadz rozmiar parlamentu" ng-pattern="/^[0-9]{1,7}$/" type="number">
+							<input required ng-model="h" class="form-control" id="H" name="H" placeholder="Wprowadz rozmiar parlamentu" ng-pattern="/^[0-9]{1,3}$/" type="number">
 		                    </input>
 		                    <div ng-show="jeffersonForm.H.$dirty && jeffersonForm.H.$touched" ng-messages="jeffersonForm.H.$error">
 								<div ng-message="required">To pole jest wymagane</div>
-								<div ng-message="pattern">Tylko liczby naturalne</div>
+								<div ng-message="pattern">Tylko liczby naturalne nie większe niż 999 !</div>
 							</div>
 						</div>
 					</div>
@@ -36,10 +36,10 @@
 		            </div>
 		            <div class="form-group">
 						<div class="col-md-9 col-md-offset-3">
-							<input ng-disabled="Submitting" type="button" id="submit" value="Wyślij" 
+							<input ng-disabled="SubmittingForm" type="button" id="submit" value="Wyślij" 
 		                        class="btn btn-primary" ng-click="getResultFromForm()" /> 
-		                    <a ng-disabled="Submitting" id="cancelButton" href="#/" name="cancelButton" class="btn btn-default">Anuluj</a>
-		                    <img ng-show="Submitting" src="Content/img/ajax-loader.gif" />
+		                    <a ng-disabled="SubmittingForm" id="cancelButton" href="#/" name="cancelButton" class="btn btn-default">Anuluj</a>
+		                    <img ng-show="SubmittingForm" src="Content/img/ajax-loader.gif" />
 						</div>
 					</div>
 				</fieldset>
@@ -57,10 +57,10 @@
 					</div>
 					<div class="form-group">
 						<div class="col-md-9 col-md-offset-3">
-							<input ng-disabled="Submitting" type="button" id="submit" value="Wyślij" 
+							<input ng-disabled="SubmittingFile" type="button" id="submit" value="Wyślij" 
 		                        class="btn btn-primary" ng-click="getResult()" /> 
-		                    <a ng-disabled="Submitting" id="cancelButton" href="#/" name="cancelButton" class="btn btn-default">Anuluj</a>
-		                    <img ng-show="Submitting" src="Content/img/ajax-loader.gif" />
+		                    <a ng-disabled="SubmittingFile" id="cancelButton" href="#/" name="cancelButton" class="btn btn-default">Anuluj</a>
+		                    <img ng-show="SubmittingFile" src="Content/img/ajax-loader.gif" />
 						</div>
 					</div>
 				</fieldset>
@@ -73,25 +73,36 @@
 	</div>
 	<div class="row" ng-hide="empty==true||correct==false||!show" style="padding-top:10pt">
 		<div class="col-md-12" >
+			<div class="horizontal">
 			<table st-table="rowCollection" class="table table-striped">
   				<tr>
   					<th class="text-center">Stan</th>
       				<th class="text-center" ng-repeat="column in tablelabel track by $index">{{$index+1}}</th>
       				<th class="text-center">Suma</th>
+      				<th class="text-center">Dzielnik</th>
+      			</tr>
+      			<tr>
+      				<td>Populacja</td>
+      				<td class="text-right" ng-repeat="population in result.StatePolulationList track by $index">{{population}}</td>
+      				<td class="text-right">{{result.PopulationOverall}}</td>
+      				<td class="text-right">---</td>
       			</tr>
       			<tbody ng-repeat="row in result.PlacmentsList track by $index">
 	  				<tr>
 	  					<td>Przydział {{$index+1}}</td>
 	    				<td class="text-right" ng-repeat="cal in row.CalculatedQuotaList track by $index">{{cal}}</td>
 	    				<td class="text-right">---</td>
+	    				<td class="text-right">{{row.Divider}}</td>
 	    			</tr>
 	    			<tr>
 	  					<td>Dolna kwota</td>
 	    				<td class="text-right" ng-repeat="seat in row.SeatsPerStateList track by $index">{{seat}}</td>
 	    				<td class="text-right">{{getTotal(row.SeatsPerStateList)}}</td>
+	    				<td class="text-right">---</td>
 	    			</tr>
     			</tbody>
 			</table>
+		</div>
 		</div>
 	</div>
 	<div class="row">
