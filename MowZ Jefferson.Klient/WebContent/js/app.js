@@ -42,7 +42,10 @@ myApp.config(['$routeProvider', '$locationProvider', '$httpProvider', function (
         controller: 'TwetController',
         templateUrl:'partials/projekt-2.html'
     });
-    // note that to minimize playground impact on app.js, we
+     $routeProvider.when('/twet-dokumentacja', {
+        templateUrl:'partials/projekt-2-doc.html'
+    });
+     // note that to minimize playground impact on app.js, we
     // are including just this simple route with a parameterized 
     // partial value (see playground.js and playground.html)
     // by default, redirect to site root

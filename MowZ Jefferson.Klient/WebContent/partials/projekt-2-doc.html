@@ -1,0 +1,884 @@
+
+<div >
+        <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
+</div>
+
+<div class="col-md-3">
+    <h1 class="blue">Twet controller</h1>
+</div>
+<div class="col-md-6">
+
+
+
+<div id="methods" class="api-class-tabpanel">
+    <h2 class="blue">Methods</h2>
+
+<div id="method_calcAk" class="method item">
+    <h3 class="name"><code>calcAk</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>E</code>
+                </li>
+                <li class="arg">
+                        <code>i</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Integer</span>
+        </span>
+<pre>
+<code>
+   function calcAk(E, i) { 
+      temp=0;
+      for (var j = 0; j < i; j++) 
+      {
+        temp+=E[j].a;
+      }
+      return temp;
+    }; 
+</code>
+</pre>
+
+
+     <div class="description">
+        <p>Funkcja obliczająca sumę współczynników wczesności zadań w zbiorze E
+wykonywanych przed aktualnie analizowanym zadaniem</p>
+
+    </div>
+
+        <div class="params">
+            <h4 class="blue">Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">E</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">i</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Pozycja na której znajduje sie analizowane zadanie w zbiorze E</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4 class="blue">Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Integer</span>:
+                    <p>temp Suma współczynników wczesności zadań.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_calcB" class="method item">
+    <h3 class="name"><code>calcB</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>E</code>
+                </li>
+                <li class="arg">
+                        <code>T</code>
+                </li>
+                <li class="arg">
+                        <code>i</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+<pre>
+<code>
+  function calcB(E,T,i) {
+      var tempbpk=0;
+      var tempbk=0;
+      for(var j=0;j< T.length;j++)
+      {
+          if(E[i].pib>T[j].pib)
+          {
+            tempbpk+=T[j].p;
+          }
+          else
+          {
+            tempbk+=T[j].b;
+          }
+      }
+      return [tempbpk,tempbk];
+    };
+</code>
+</pre>
+
+    <div class="description">
+        <p>Funkcja obliczająca sumę czasów trwania zadan wykonywanych przed
+aktualnie analizowanym zadaniu oraz suma współczynników opóźnienia
+po aktualnie analizowanym zadaniu</p>
+
+    </div>
+
+        <div class="params">
+            <h4 class="blue">Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">E</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">T</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze T</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">i</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Pozycja na której znajduje sie analizowane zadanie w zbiorze E</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4 class="blue">Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+                    <p>.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_calcK" class="method item">
+    <h3 class="name"><code>calcK</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>E</code>
+                </li>
+                <li class="arg">
+                        <code>ak</code>
+                </li>
+                <li class="arg">
+                        <code>bk</code>
+                </li>
+                <li class="arg">
+                        <code>bpk</code>
+                </li>
+                <li class="arg">
+                        <code>pk</code>
+                </li>
+                <li class="arg">
+                        <code>i</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Integer</span>
+        </span>
+
+<pre>
+<code>
+ function calcK(E,ak,bk,bpk,pk,i) {
+      temp=E[i].p*(ak-bk)+pk*E[i].a-E[i].b*(bpk+E[i].p);
+      return temp;              
+    };
+</code>
+</pre>   
+
+
+
+  
+
+    <div class="description">
+        <p>Funkcja obliczająca całkowity zysk z przeniesienia zadania i
+do zbioru T.</p>
+
+    </div>
+
+        <div class="params">
+            <h4 class="blue">Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">E</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">ak</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Suma współczynników wczesności zadań w zbiorze E
+wykonywanych przed aktualnie analizowanym zadaniem</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">bk</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Suma współczynników opóźnienia
+po aktualnie analizowanym zadaniu</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">bpk</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Suma czasów trwania zadan wykonywanych przed
+aktualnie analizowanym zadaniu</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">pk</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Suma czasów trwania zadań wykonywanych po
+aktualnie analizowanym zadaniu</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">i</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Pozycja na której znajduje sie analizowane zadanie w zbiorze E</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4 class="blue">Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Integer</span>:
+                    <p>Całkowity zysk z przeniesienia zadania i do zbioru T.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_calcPk" class="method item">
+    <h3 class="name"><code>calcPk</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>E</code>
+                </li>
+                <li class="arg">
+                        <code>i</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Integer</span>
+        </span>
+
+<pre>
+<code>
+   function calcPk(E, i) {
+      temp=0;
+      for(var j=i+1;j< E.length;j++)
+      {
+          temp+=E[j].p;
+      }
+      return temp;
+    };
+</code>
+</pre>   
+    <div class="description">
+        <p>Funkcja obliczająca sumę czasów trwania zadań wykonywanych po
+aktualnie analizowanym zadaniu</p>
+
+    </div>
+
+        <div class="params">
+            <h4 class="blue">Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">E</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">i</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Pozycja na której znajduje sie analizowane zadanie w zbiorze E</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4 class="blue">Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Integer</span>:
+                    <p>temp Suma czasów trwania zadań.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_test1" class="method item">
+    <h3 class="name"><code>test1</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>Array1</code>
+                </li>
+                <li class="arg">
+                        <code>range</code>
+                </li>
+                <li class="arg">
+                        <code>result</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+        <pre>
+<code>
+    function test1(Array1,range,result){
+      var test=calcAk(Array1,range);
+      if(test==result)
+      {
+        return true;
+      }
+      else
+        return false;
+    };
+</code>
+</pre>   
+
+    <div class="description">
+        <p>Funkcja sprawdzająca poprawność działania funkcji calcAk</p>
+
+    </div>
+
+        <div class="params">
+            <h4 class="blue">Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">Array1</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">range</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Pozycja na której znajduje sie analizowane zadanie w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">result</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Oczekiwany wynik</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_test2" class="method item">
+    <h3 class="name"><code>test2</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>Array1</code>
+                </li>
+                <li class="arg">
+                        <code>range</code>
+                </li>
+                <li class="arg">
+                        <code>result</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+<pre>
+<code>
+     function test2(Array1,range,result){
+      var test=calcPk(Array1,range);
+      if(test==result)
+      {
+        return true;
+      }
+      else
+        return false;
+    };
+</code>
+</pre>   
+    <div class="description">
+        <p>Funkcja sprawdzająca poprawność działania funkcji calcPk</p>
+
+    </div>
+
+        <div class="params">
+            <h4 class="blue">Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">Array1</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">range</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Pozycja na której znajduje sie analizowane zadanie w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">result</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Oczekiwany wynik</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_test3" class="method item">
+    <h3 class="name"><code>test3</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>Array1</code>
+                </li>
+                <li class="arg">
+                        <code>Array2</code>
+                </li>
+                <li class="arg">
+                        <code>range</code>
+                </li>
+                <li class="arg">
+                        <code>result</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+<pre>
+<code>
+   function test3(Array1,Array2,range,result)
+    {
+      var test=calcB(Array1,Array2,range);
+      if(test[0]==result)
+      {
+        return true;
+      }
+      else
+        return false;
+    } 
+</code>
+</pre>   
+    <div class="description">
+        <p>Funkcja sprawdzająca poprawność działania funkcji calcB - wartosci bpk</p>
+
+    </div>
+
+        <div class="params">
+            <h4 class="blue">Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">Array1</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">Array2</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze T</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">range</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Pozycja na której znajduje sie analizowane zadanie w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">result</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Oczekiwany wynik</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_test4" class="method item">
+    <h3 class="name"><code>test4</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>Array1</code>
+                </li>
+                <li class="arg">
+                        <code>Array2</code>
+                </li>
+                <li class="arg">
+                        <code>range</code>
+                </li>
+                <li class="arg">
+                        <code>result</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+<pre>
+<code>
+   function test4(Array1,Array2,range,result)
+    {
+      var test=calcB(Array1,Array2,range);
+      if(test[1]==result)
+      {
+        return true;
+      }
+      else
+        return false;
+    } 
+</code>
+</pre>   
+    <div class="description">
+        <p>Funkcja sprawdzająca poprawność działania funkcji calcB - wartosci bk</p>
+
+    </div>
+
+        <div class="params">
+            <h4 class="blue">Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">Array1</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">Array2</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze T</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">range</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Pozycja na której znajduje sie analizowane zadanie w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">result</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Oczekiwany wynik</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_test5" class="method item">
+    <h3 class="name"><code>test5</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>Array1</code>
+                </li>
+                <li class="arg">
+                        <code>Eak</code>
+                </li>
+                <li class="arg">
+                        <code>Ebk</code>
+                </li>
+                <li class="arg">
+                        <code>Ebpk</code>
+                </li>
+                <li class="arg">
+                        <code>Epk</code>
+                </li>
+                <li class="arg">
+                        <code>range</code>
+                </li>
+                <li class="arg">
+                        <code>result</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+<pre>
+<code>
+     function test5(Array1,range,Eak,Ebk,Ebpk,Epk,result){
+      var test=calcK(Array1,Eak,Ebk,Ebpk,Epk,range);
+      if(test==result)
+      {
+        return true;
+      }
+      else
+        return false;
+    };
+</code>
+</pre>   
+    <div class="description">
+        <p>Funkcja sprawdzająca poprawność działania funkcji calcK</p>
+
+    </div>
+
+        <div class="params">
+            <h4 class="blue">Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">Array1</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Tablica zadań znajdujących się w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">Eak</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Suma współczynników wczesności zadań w zbiorze E
+wykonywanych przed aktualnie analizowanym zadaniem</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">Ebk</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Suma współczynników opóźnienia
+po aktualnie analizowanym zadaniu</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">Ebpk</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Suma czasów trwania zadan wykonywanych przed
+aktualnie analizowanym zadaniu</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">Epk</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Suma czasów trwania zadań wykonywanych po
+aktualnie analizowanym zadaniu</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">range</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Pozycja na której znajduje sie analizowane zadanie w zbiorze E</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">result</code>
+                        <span class="type">Integer</span>
+
+
+                    <div class="param-description">
+                        <p>Oczekiwany wynik</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+</div>
+</div>
+</div>
