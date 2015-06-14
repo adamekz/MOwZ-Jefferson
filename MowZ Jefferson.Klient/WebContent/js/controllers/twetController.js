@@ -63,10 +63,12 @@ myApp.controller('TwetController', function($scope,$location,$http) {
       $scope.resultarray=[];
       $scope.T=[];
       T=[];
-      for (var i = 0; i < $scope.resultarray.length; i++)
-      {
-        $scope.resultarray[i]={};
-      }
+      $scope.pall=0;
+      var war1=1;
+      var K=0;
+      var Kmax=0;
+      var choose=9999999999;
+       
 
     	for (var i = 0; i < $scope.taskarray.length; i++) {
             $scope.taskarray[i].pia = $scope.taskarray[i].p/$scope.taskarray[i].a;
@@ -131,16 +133,21 @@ myApp.controller('TwetController', function($scope,$location,$http) {
         $scope.resultarray=E.concat(T);
         $scope.E=E;
         $scope.T=T;
+        $scope.koszt=0;
+        var pall2=$scope.pall;
+        for (var i = 0; i < T.length; i++) {
+          T[i].d=$scope.D+T[i].p;
+          $scope.koszt+=T[i].b*T[i].p;
+          pall2-=T[i].p;
+        }
         for (var i = 0; i < E.length-1; i++) {
           E[i].d=$scope.D-E[i+1].p;
-
+          pall2-=E[i].p;
+          $scope.koszt+=E[i].a*pall2;
         }
         E[E.length-1].d=$scope.D;
 
-        for (var i = 0; i < T.length; i++) {
-          T[i].d=$scope.D+T[i].p;
-
-        }
+        
         for (var i = 0; i < $scope.resultarray.length; i++) {
   	 		$scope.resultarray[i].norm=Math.floor($scope.resultarray[i].p/$scope.pall*10000)/100-1;		
              if(i%3==0)
@@ -161,7 +168,8 @@ myApp.controller('TwetController', function($scope,$location,$http) {
 
           $scope.done=true;
          // $scope.dsad=[];
-         $scope.koszt=0;
+         line.d=$scope.D;
+         
          $scope.Eleng=E.length;
        }
 

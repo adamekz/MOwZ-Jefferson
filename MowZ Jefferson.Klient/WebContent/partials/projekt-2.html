@@ -120,6 +120,7 @@
 	<div class="row" ng-show="done">
 		Uszeregowanie zadań	 
 		 <progress ><bar ng-repeat="bar in resultarray track by $index" value="bar.norm" type="{{bar.type}}"><span ng-hide="bar.p < 1">{{bar.i}}</span><span ng-hide="bar.p < 1">({{bar.d}})</span></bar></progress>
+		 <div><b>Koszt {{koszt}}</b></div>
 			
 	</div>
 	<div class="row" >
