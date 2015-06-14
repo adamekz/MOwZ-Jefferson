@@ -12,13 +12,15 @@ myApp.controller('TwetController', function($scope,$location,$http) {
     ];
     var T=[];
     var E=[];
-    var line ={type:"warning",norm:1};
+    var line ={type:"warning",norm:1,p:0};
+    
     $scope.pall=0;
     $scope.done=false;
     $scope.show=false;
     $scope.resulttest=[];
     $scope.showtest=false;
     $scope.resultarray=[];
+    $scope.wrong=false;
     var asum=0;
     var bsum=0;
     var war1=1;
@@ -26,6 +28,7 @@ myApp.controller('TwetController', function($scope,$location,$http) {
     var Kmax=0;
     var choose=9999999999;
     var temp=0;
+    var suma=0;
 
 
     $scope.getNumber = function(num) {
@@ -52,6 +55,18 @@ myApp.controller('TwetController', function($scope,$location,$http) {
       $scope.showtest=true;
     };
     $scope.getResult = function(){
+      $scope.done=false;
+      $scope.show=false;
+      $scope.wrong=false;
+      suma=0;
+      $scope.alerts = [];
+      $scope.resultarray=[];
+      $scope.T=[];
+      T=[];
+      for (var i = 0; i < $scope.resultarray.length; i++)
+      {
+        $scope.resultarray[i]={};
+      }
 
     	for (var i = 0; i < $scope.taskarray.length; i++) {
             $scope.taskarray[i].pia = $scope.taskarray[i].p/$scope.taskarray[i].a;
@@ -60,73 +75,95 @@ myApp.controller('TwetController', function($scope,$location,$http) {
             $scope.pall+=$scope.taskarray[i].p;
             asum+=$scope.taskarray[i].a;
             E[i]=$scope.taskarray[i];
+            suma+=$scope.taskarray[i].p;
         }
       
       // E=$scope.taskarray;
-
-      E.sort(function(a,b) { return parseFloat(b.pia) - parseFloat(a.pia) } );
-      while(1)
+      if(suma>$scope.D)
       {
-          for (var i = 0; i < E.length; i++) 
-          {
-             if(asum-E[i].a>=bsum+E[i].b)
-             {
-                war1=0;
-                var ak=0;
-                var pk=0;
-                var bpk=0;
-                var bk=0;
-                ak=calcAk(E,i);
-                pk=calcPk(E,i);
-                var tempb=calcB(E,T,i);
-                bpk=tempb[0];
-                bk=tempb[1];
-
-                K=calcK(E,ak,bk,bpk,pk,i);
-                if(K>Kmax)
-                {
-                  Kmax=K;
-                  choose=i;
-                }
-
-             }
-          }
-          if(war1==1 || choose==9999999999)
-          {
-            break;
-          }
-          else
-          {
-            T.push(E[choose]);
-            T.sort(function(a,b) { return parseFloat(a.pib) - parseFloat(b.pib) } );
-            asum-=E[choose].a;
-            E.splice(choose, 1);
-            choose=9999999999;
-            Kmax=0;
-
-          }
+          $scope.wrong=true;
+          $scope.alerts = [{ type: 'danger', msg: "Nieprawidłowe dane problem nierestryktywny." }];
       }
-      $scope.resultarray=E.concat(T);
-      for (var i = 0; i < $scope.resultarray.length; i++) {
-	 		$scope.resultarray[i].norm=Math.floor($scope.resultarray[i].p/$scope.pall*10000)/100-1;		
-           if(i%3==0)
-           {
-           		$scope.resultarray[i].type='success';
-           }
-           if(i%3==1)
-           {
-           		$scope.resultarray[i].type='info';
-           	}
-           if(i%3==2)
-           {
-           		$scope.resultarray[i].type='danger';
-           }
-         }
-        // $scope.resultarray[resultarray.length-1].norm=$scope.resultarray[resultarray.length-1].norm-1;
-        $scope.resultarray.splice(E.length,0,line);
+      else
+      {
+        E.sort(function(a,b) { return parseFloat(b.pia) - parseFloat(a.pia) } );
+        while(1)
+        {
+            for (var i = 0; i < E.length; i++) 
+            {
+               if(asum-E[i].a>=bsum+E[i].b)
+               {
+                  war1=0;
+                  var ak=0;
+                  var pk=0;
+                  var bpk=0;
+                  var bk=0;
+                  ak=calcAk(E,i);
+                  pk=calcPk(E,i);
+                  var tempb=calcB(E,T,i);
+                  bpk=tempb[0];
+                  bk=tempb[1];
 
-        $scope.done=true;
-       // $scope.dsad=[];
+                  K=calcK(E,ak,bk,bpk,pk,i);
+                  if(K>Kmax)
+                  {
+                    Kmax=K;
+                    choose=i;
+                  }
+
+               }
+            }
+            if(war1==1 || choose==9999999999)
+            {
+              break;
+            }
+            else
+            {
+              T.push(E[choose]);
+              T.sort(function(a,b) { return parseFloat(a.pib) - parseFloat(b.pib) } );
+              asum-=E[choose].a;
+              E.splice(choose, 1);
+              choose=9999999999;
+              Kmax=0;
+
+            }
+        }
+        $scope.resultarray=E.concat(T);
+        $scope.E=E;
+        $scope.T=T;
+        for (var i = 0; i < E.length-1; i++) {
+          E[i].d=$scope.D-E[i+1].p;
+
+        }
+        E[E.length-1].d=$scope.D;
+
+        for (var i = 0; i < T.length; i++) {
+          T[i].d=$scope.D+T[i].p;
+
+        }
+        for (var i = 0; i < $scope.resultarray.length; i++) {
+  	 		$scope.resultarray[i].norm=Math.floor($scope.resultarray[i].p/$scope.pall*10000)/100-1;		
+             if(i%3==0)
+             {
+             		$scope.resultarray[i].type='success';
+             }
+             if(i%3==1)
+             {
+             		$scope.resultarray[i].type='info';
+             	}
+             if(i%3==2)
+             {
+             		$scope.resultarray[i].type='danger';
+             }
+           }
+          // $scope.resultarray[resultarray.length-1].norm=$scope.resultarray[resultarray.length-1].norm-1;
+          $scope.resultarray.splice(E.length,0,line);
+
+          $scope.done=true;
+         // $scope.dsad=[];
+         $scope.koszt=0;
+         $scope.Eleng=E.length;
+       }
 
     };
     /**
@@ -314,6 +351,9 @@ myApp.controller('TwetController', function($scope,$location,$http) {
       }
       else
         return false;
+    };
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
     };
 
 

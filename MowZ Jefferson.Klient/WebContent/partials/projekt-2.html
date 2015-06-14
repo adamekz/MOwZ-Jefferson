@@ -4,7 +4,17 @@
 			<form name="twetForm" novalidate role="form" class="form-horizontal">
 				<fieldset>
 					<legend>Formularz</legend>
-
+					<div class="form-group">
+						<label class="col-md-5 control-label" for="number">D:</label>
+						<div class="col-md-6">
+							<input ng-model="D" id="D" name="D" placeholder="Wprowadz ostateczny termin" class="form-control" required ng-pattern="/^[0-9]{1,3}$/"
+								type="number" ></input>
+							<div ng-show="twetForm.task.$dirty && twetForm.task.$touched" ng-messages="twetForm.task.$error">
+								<div ng-message="required">To pole jest wymagane</div>
+								<div ng-message="pattern">Tylko liczby naturalne nie większe niz 999!</div>
+							</div>
+						</div>
+					</div>
 					<div class="form-group">
 						<label class="col-md-5 control-label" for="number">Zadań:</label>
 						<div class="col-md-6">
@@ -57,37 +67,51 @@
 		<input ng-model="show" type="checkbox">
 	</div>
 	
-	<div class="row"  ng-hide="!show" style="padding-top:10pt">
+	<div class="row"  ng-show="show && done" style="padding-top:10pt">
 		<div class="col-md-12" >
 			<div class="horizontal">
 			<table st-table="rowCollection" class="table table-striped">
   				<tr>
   					<th class="text-center">Zadanie</th>
-      				<th class="text-center" ng-repeat="column in resultarray track by $index">{{$index+1}}</th>
+      				<th class="text-center" ng-repeat="column in E track by $index">{{$index+1}}</th>
+      				<th class="text-center" >D</th>
+      				<th class="text-center" ng-repeat="column in T track by $index">{{$index+1+Eleng}}</th>
       			</tr>
       			<tr>
       				<td>i</td>
-    				<td class="text-center" ng-repeat="cal in resultarray track by $index">{{cal.i}}</td>
+    				<td class="text-center" ng-repeat="cal in E track by $index">{{cal.i}}</td>
+    				<td class="text-center">|</td>
+    				<td class="text-center" ng-repeat="cal in T track by $index">{{cal.i}}</td>
       			</tr>
       			<tr>
   					<td>pi</td>
-    				<td class="text-center" ng-repeat="cal in resultarray track by $index">{{cal.p}}</td>
+    				<td class="text-center" ng-repeat="cal in E track by $index">{{cal.p}}</td>
+    				<td class="text-center">|</td>
+    				<td class="text-center" ng-repeat="cal in T track by $index">{{cal.p}}</td>
     			</tr>
     			<tr>
   					<td>ai</td>
-    				<td class="text-center" ng-repeat="cal in resultarray track by $index">{{cal.a}}</td>
+    				<td class="text-center" ng-repeat="cal in E track by $index">{{cal.a}}</td>
+    				<td class="text-center">|</td>
+    				<td class="text-center" ng-repeat="cal in T track by $index">{{cal.a}}</td>
     			</tr>
     			<tr>
   					<td>bi</td>
-    				<td class="text-center" ng-repeat="cal in resultarray track by $index">{{cal.b}}</td>
+    				<td class="text-center" ng-repeat="cal in E track by $index">{{cal.b}}</td>
+    				<td class="text-center">|</td>
+    				<td class="text-center" ng-repeat="cal in T track by $index">{{cal.b}}</td>
     			</tr>
     			<tr>
   					<td>pi/ai</td>
-    				<td class="text-center" ng-repeat="cal in resultarray track by $index">{{cal.pia}}</td>
+    				<td class="text-center" ng-repeat="cal in E track by $index">{{cal.pia}}</td>
+    				<td class="text-center">|</td>
+    				<td class="text-center" ng-repeat="cal in T track by $index">{{cal.pia}}</td>
     			</tr>
     			<tr>
   					<td>pi/bi</td>
-    				<td class="text-center" ng-repeat="cal in resultarray track by $index">{{cal.pib}}</td>
+    				<td class="text-center" ng-repeat="cal in E track by $index">{{cal.pib}}</td>
+    				<td class="text-center">|</td>
+    				<td class="text-center" ng-repeat="cal in T track by $index">{{cal.pib}}</td>
     			</tr>
 			</table>
 		</div>
@@ -95,8 +119,16 @@
 	</div>
 	<div class="row" ng-show="done">
 		Uszeregowanie zadań	 
-		 <progress ><bar ng-repeat="bar in resultarray track by $index" value="bar.norm" type="{{bar.type}}"><span ng-hide="bar.p < 5">{{bar.i}}</span></bar></progress>
+		 <progress ><bar ng-repeat="bar in resultarray track by $index" value="bar.norm" type="{{bar.type}}"><span ng-hide="bar.p < 1">{{bar.i}}</span><span ng-hide="bar.p < 1">({{bar.d}})</span></bar></progress>
+			
+	</div>
+	<div class="row" >
 		
+	</div>
+	<div class="row">
+		<div class="col-md-12" ng-show="wrong" >
+ 			<alert ng-repeat="alert in alerts" type="danger" close="closeAlert($index)">{{alert.msg}}</alert>
+ 		</div>
 	</div>
 	<div class="row" ng-show="showtest">
 		<div ng-class="{'green': t == true,'red': t == false}"ng-repeat="t in resulttest track by $index">   Test {{$index+1}} {{t}}</div>		
