@@ -10,6 +10,13 @@ myApp.controller('TwetController', function($scope,$location,$http) {
       {i:4,p:10,a:7,b:7,pia:1.43,pib:1.43},
       {i:5,p:4,a:3,b:5,pia:1.33,pib:0.8},
     ];
+    var testresult1 = [
+    {i:2},
+    {i:3},
+    {i:4},];
+    var testresult2 = [
+    {i:5},
+    {i:1},];
     var T=[];
     var E=[];
     var line ={type:"warning",norm:1,p:0};
@@ -29,6 +36,7 @@ myApp.controller('TwetController', function($scope,$location,$http) {
     var choose=9999999999;
     var temp=0;
     var suma=0;
+
 
 
     $scope.getNumber = function(num) {
@@ -52,6 +60,7 @@ myApp.controller('TwetController', function($scope,$location,$http) {
       $scope.resulttest.push(test4(testArray,[],4,0));
       $scope.resulttest.push(test5(testArray,0,0,0,0,34,104));
       $scope.resulttest.push(test5(testArray,4,20,0,0,0,60));
+      $scope.resulttest.push(test6(testArray,testresult1,testresult2));
       $scope.showtest=true;
     };
     $scope.getResult = function(){
@@ -134,16 +143,34 @@ myApp.controller('TwetController', function($scope,$location,$http) {
         $scope.E=E;
         $scope.T=T;
         $scope.koszt=0;
-        var pall2=$scope.pall;
+        var Tall=0;
+        var Eall=E[E.length-1].p;
         for (var i = 0; i < T.length; i++) {
-          T[i].d=$scope.D+T[i].p;
-          $scope.koszt+=T[i].b*T[i].p;
-          pall2-=T[i].p;
+          if(i==0)
+          {
+              T[i].d=$scope.D+T[i].p;
+          }
+          else
+          {
+            T[i].d=T[i-1].d+T[i].p
+          }
+          Tall+=T[i].p;          
+          $scope.koszt+=T[i].b*Tall;
+          
         }
-        for (var i = 0; i < E.length-1; i++) {
-          E[i].d=$scope.D-E[i+1].p;
-          pall2-=E[i].p;
-          $scope.koszt+=E[i].a*pall2;
+        for (var i = E.length-2; i >=0; i--) {
+          if(i==E.length-1)
+          {
+            E[i].d=$scope.D-E[i+1].p;
+          }
+          else
+          {
+            E[i].d=E[i+1].d-E[i+1].p;
+          }
+          
+          
+          $scope.koszt+=E[i].a*Eall;
+          Eall+=E[i].p;
         }
         E[E.length-1].d=$scope.D;
 
@@ -359,6 +386,30 @@ myApp.controller('TwetController', function($scope,$location,$http) {
       }
       else
         return false;
+    };
+    function test6(Array1,result1,result2){
+      var good=true;
+      $scope.taskarray=[];
+      $scope.D=100;
+      $scope.task=Array1.length;
+      for (var i = 0; i <Array1.length; i++) {
+        $scope.taskarray[i]=Array1[i];
+      }
+      $scope.getResult();
+      $scope.done=false;
+      for (var i = 0; i <$scope.E.length; i++) {
+        if($scope.E[i].i!=result1[i].i)
+        {
+          good=false;
+        }
+      }
+       for (var i = 0; i <$scope.T.length; i++) {
+        if($scope.T[i].i!=result2[i].i)
+        {
+          good=false;
+        }
+      }
+      return good
     };
     $scope.closeAlert = function(index) {
         $scope.alerts.splice(index, 1);
