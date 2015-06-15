@@ -19,6 +19,8 @@ myApp.controller('TwetController', function($scope,$location,$http) {
     {i:1},];
     var T=[];
     var E=[];
+    var T2=[];
+    var E2=[];
     var line ={type:"warning",norm:1,p:0};
     
     $scope.pall=0;
@@ -31,11 +33,17 @@ myApp.controller('TwetController', function($scope,$location,$http) {
     var asum=0;
     var bsum=0;
     var war1=1;
+    var war2=1;
     var K=0;
     var Kmax=0;
     var choose=9999999999;
     var temp=0;
     var suma=0;
+    var koszt=0;
+    var Tall=0;
+    var Eall=0;
+
+    
 
 
 
@@ -67,25 +75,30 @@ myApp.controller('TwetController', function($scope,$location,$http) {
       $scope.done=false;
       $scope.show=false;
       $scope.wrong=false;
+      $scope.showtest=false;
       suma=0;
       $scope.alerts = [];
       $scope.resultarray=[];
       $scope.T=[];
       T=[];
+      T2=[];
       $scope.pall=0;
       var war1=1;
       var K=0;
       var Kmax=0;
       var choose=9999999999;
-       
+      var koszt2=0;
+      
 
     	for (var i = 0; i < $scope.taskarray.length; i++) {
             $scope.taskarray[i].pia = $scope.taskarray[i].p/$scope.taskarray[i].a;
             $scope.taskarray[i].pib = $scope.taskarray[i].p/$scope.taskarray[i].b;
             $scope.taskarray[i].i = i+1;
+            $scope.taskarray[i].d = 0;
             $scope.pall+=$scope.taskarray[i].p;
             asum+=$scope.taskarray[i].a;
             E[i]=$scope.taskarray[i];
+            E2[i]=$scope.taskarray[i];
             suma+=$scope.taskarray[i].p;
         }
       
@@ -97,84 +110,72 @@ myApp.controller('TwetController', function($scope,$location,$http) {
       }
       else
       {
-        E.sort(function(a,b) { return parseFloat(b.pia) - parseFloat(a.pia) } );
-        while(1)
-        {
-            for (var i = 0; i < E.length; i++) 
+        var min=99999999999999;
+        var tempT=[];
+        var tempE=[];
+        for (var i = 0; i < $scope.taskarray.length; i++) {
+            
+            T.push(E[i]);
+            asum-=E[i].a;
+            bsum+=E[i].b;
+            E.splice(i, 1);
+            var prev=main(E,T);
+            if(prev[1]<min)
             {
-               if(asum-E[i].a>=bsum+E[i].b)
-               {
-                  war1=0;
-                  var ak=0;
-                  var pk=0;
-                  var bpk=0;
-                  var bk=0;
-                  ak=calcAk(E,i);
-                  pk=calcPk(E,i);
-                  var tempb=calcB(E,T,i);
-                  bpk=tempb[0];
-                  bk=tempb[1];
-
-                  K=calcK(E,ak,bk,bpk,pk,i);
-                  if(K>Kmax)
-                  {
-                    Kmax=K;
-                    choose=i;
-                  }
-
-               }
+              for (var i = 0; i < E.length; i++) {
+                tempE[i]=E[i].i;
+              };
+              for (var i = 0; i < T.length; i++) {
+                tempT[i]=T[i].i;
+              };
+              min=prev[1];
             }
-            if(war1==1 || choose==9999999999)
+            for (var i = 0; i < $scope.taskarray.length; i++) {
+            asum+=$scope.taskarray[i].a;
+            E[i]=$scope.taskarray[i];
+     
+        }
+        bsum=0;
+        T=[];
+
+
+        }
+        E=[];
+          for (var i = 0; i < tempE.length; i++) {
+              E[i]=$scope.taskarray[tempE[i]-1];
+            }
+            for (var i = 0; i < tempT.length; i++) {
+              T[i]=$scope.taskarray[tempT[i]-1];
+            } 
+    
+          $scope.E=E;
+          $scope.T=T;
+          $scope.resultarray=E.concat(T);
+          $scope.koszt=prev[1];
+          for (var i = 0; i < T.length; i++) {
+            if(i==0)
             {
-              break;
+                T[i].d=$scope.D+T[i].p;
             }
             else
             {
-              T.push(E[choose]);
-              T.sort(function(a,b) { return parseFloat(a.pib) - parseFloat(b.pib) } );
-              asum-=E[choose].a;
-              E.splice(choose, 1);
-              choose=9999999999;
-              Kmax=0;
-
+              T[i].d=T[i-1].d+T[i].p
             }
-        }
-        $scope.resultarray=E.concat(T);
-        $scope.E=E;
-        $scope.T=T;
-        $scope.koszt=0;
-        var Tall=0;
-        var Eall=E[E.length-1].p;
-        for (var i = 0; i < T.length; i++) {
-          if(i==0)
-          {
-              T[i].d=$scope.D+T[i].p;
           }
-          else
-          {
-            T[i].d=T[i-1].d+T[i].p
+         for (var i = E.length-2; i >=0; i--) {
+            if(i==E.length-1)
+            {
+              E[i].d=$scope.D-E[i+1].p;
+            }
+            else
+            {
+              E[i].d=E[i+1].d-E[i+1].p;
+            }
           }
-          Tall+=T[i].p;          
-          $scope.koszt+=T[i].b*Tall;
-          
-        }
-        for (var i = E.length-2; i >=0; i--) {
-          if(i==E.length-1)
-          {
-            E[i].d=$scope.D-E[i+1].p;
-          }
-          else
-          {
-            E[i].d=E[i+1].d-E[i+1].p;
-          }
-          
-          
-          $scope.koszt+=E[i].a*Eall;
-          Eall+=E[i].p;
-        }
-        E[E.length-1].d=$scope.D;
-
         
+            
+        
+        // $scope.resultarray=E.concat(T);
         for (var i = 0; i < $scope.resultarray.length; i++) {
   	 		$scope.resultarray[i].norm=Math.floor($scope.resultarray[i].p/$scope.pall*10000)/100-1;		
              if(i%3==0)
@@ -201,6 +202,90 @@ myApp.controller('TwetController', function($scope,$location,$http) {
        }
 
     };
+
+    function main(Arr1,Arr2)
+    {
+      var prevchoose={};
+      Arr1.sort(function(a,b) { return parseFloat(b.pia) - parseFloat(a.pia) } );
+        while(1)
+        {
+            var tablica=[];
+            // var temptab ={i:-1,k:-1};
+            for (var i = 0; i < Arr1.length; i++) 
+            {
+               if(asum-Arr1[i].a>=bsum+Arr1[i].b)
+               {
+                  war1=0;
+                  var ak=0;
+                  var pk=0;
+                  var bpk=0;
+                  var bk=0;
+                  ak=calcAk(Arr1,i);
+                  pk=calcPk(Arr1,i);
+                  var tempb=calcB(Arr1,Arr2,i);
+                  bpk=tempb[0];
+                  bk=tempb[1];
+                  // if(T.length==0)
+                  // {
+                  //     var prevchoose=choose;
+                  // }
+                  K=calcK(Arr1,ak,bk,bpk,pk,i);
+                  if(K>0)
+                  {
+                    war2=0;
+                  }
+                  // temptab.k=K;
+                  // temptab.i=i;
+                  // tablica.push(temptab);
+                  tablica.splice(0, 0, {i:i,k:K});
+                  // if(K>Kmax)
+                  // {
+                    
+                  //   Kmax=K;
+                  //   choose=i;
+                  // }
+
+               }
+            }
+            if(war1==1 || war2==1)
+            {
+              break;
+            }
+            else
+            {
+
+              tablica.sort(function(a,b) { return parseFloat(b.k) - parseFloat(a.k) } );
+              choose=tablica[0].i;
+              Arr2.push(Arr1[choose]);
+              Arr2.sort(function(a,b) { return parseFloat(a.pib) - parseFloat(b.pib) } );
+              asum-=Arr1[choose].a;
+              Arr1.splice(choose, 1);
+              choose=9999999999;
+              Kmax=0;
+              war2=1;
+
+            }
+        }
+        
+        
+        koszt=0;
+        Tall=0;
+        Eall=Arr1[Arr1.length-1].p;
+        for (var i = 0; i < Arr2.length; i++) {
+          Tall+=Arr2[i].p;          
+          koszt+=Arr2[i].b*Tall;
+          
+        }
+        for (var i = Arr1.length-2; i >=0; i--) {
+          
+          koszt+=Arr1[i].a*Eall;
+          Eall+=Arr1[i].p;
+        }
+        Arr1[Arr1.length-1].d=$scope.D;
+       
+        return [prevchoose,koszt];
+
+    }
     /**
     * Funkcja obliczająca sumę współczynników wczesności zadań w zbiorze E 
     * wykonywanych przed aktualnie analizowanym zadaniem
@@ -397,19 +482,27 @@ myApp.controller('TwetController', function($scope,$location,$http) {
       }
       $scope.getResult();
       $scope.done=false;
-      for (var i = 0; i <$scope.E.length; i++) {
+      if($scope.E.length==result1.length)
+      {
+      for (var i = 0; i <result1.length; i++) {
         if($scope.E[i].i!=result1[i].i)
         {
           good=false;
         }
       }
-       for (var i = 0; i <$scope.T.length; i++) {
+       for (var i = 0; i <result2.length; i++) {
         if($scope.T[i].i!=result2[i].i)
         {
           good=false;
         }
       }
+
       return good
+      }
+      else
+      {
+        return false;
+      }
     };
     $scope.closeAlert = function(index) {
         $scope.alerts.splice(index, 1);
